@@ -1,5 +1,8 @@
 ### 0.4.12 (unreleased)
 
+Features:
+ * Inline assembly: Support ``create2`` (EIP86) as an opcode.
+
 ### 0.4.11 (2017-05-03)
 
 Features:
