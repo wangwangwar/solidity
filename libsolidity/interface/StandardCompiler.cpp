@@ -160,6 +160,38 @@ Json::Value collectEVMObject(eth::LinkerObject const& _object, string const* _so
 	return output;
 }
 
+Json::Value compileLLL(Json::Value const& _input)
+{
+	if (!_input["source"].isString())
+		return formatFatalError("JSONError", "Source missing.");
+
+	Json::Value const& settings = _input.get("settings", Json::Value());
+	Json::Value optimizerSettings = settings.get("optimizer", Json::Value());
+	bool optimize = optimizerSettings.get("enabled", Json::Value(false)).asBool();
+
+	vector<string> errorList;
+	Json::Value output;
+	output["contracts"] = Json::objectValue;
+	output["contracts"][""] = Json::objectValue;
+	output["contracts"][""]["parsed"] = parseLLL(_input["source"]);
+	output["contracts"][""]["bytecode"] = compileLLL(_input["source"], optimize, &errorList);
+
+	Json::Value errors = Json::arrayValue;
+	for (auto const& error: errorList)
+	{
+		errors.append(formatError(
+			false,
+			"LLLError",
+			"general",
+			error
+		));
+	}
+
+	output["errors"] = errors;
+
+	return output;
+}
+
 }
 
 Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
@@ -169,8 +201,11 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 	if (!_input.isObject())
 		return formatFatalError("JSONError", "Input is not a JSON object.");
 
+	if (_input["language"] == "LLL")
+		return compileLLL(_input);
+
 	if (_input["language"] != "Solidity")
-		return formatFatalError("JSONError", "Only \"Solidity\" is supported as a language.");
+		return formatFatalError("JSONError", "Only \"Solidity\", \"LLL\" is supported as a language.");
 
 	Json::Value const& sources = _input["sources"];
 	if (!sources)
