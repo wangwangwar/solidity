@@ -184,3 +184,20 @@ void ErrorReporter::fatalWhy3TranslatorError(ASTNode const& _location, std::stri
 	);
 }
 
+void ErrorReporter::juliaCompilerError(ASTNode const& _location, std::string const& _description)
+{
+	error(
+		Error::Type::JuliaCompilerError,
+		_location.location(),
+		_description
+	);
+}
+
+void ErrorReporter::fatalJuliaCompilerError(ASTNode const& _location, std::string const& _description)
+{
+	fatalError(
+		Error::Type::JuliaCompilerError,
+		_location.location(),
+		_description
+	);
+}

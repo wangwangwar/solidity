@@ -83,6 +83,10 @@ public:
 
 	void fatalWhy3TranslatorError(ASTNode const& _location, std::string const& _description);
 
+	void juliaCompilerError(ASTNode const& _location, std::string const& _description);
+
+	void fatalJuliaCompilerError(ASTNode const& _location, std::string const& _description);
+
 	ErrorList const& errors() const;
 
 	void clear();

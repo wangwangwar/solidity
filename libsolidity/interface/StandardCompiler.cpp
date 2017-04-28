@@ -23,6 +23,7 @@
 #include <libsolidity/interface/StandardCompiler.h>
 #include <libsolidity/interface/SourceReferenceFormatter.h>
 #include <libsolidity/ast/ASTJsonConverter.h>
+#include <libsolidity/inlineasm/AsmPrinter.h>
 #include <libevmasm/Instruction.h>
 #include <libdevcore/JSON.h>
 #include <libdevcore/SHA3.h>
@@ -425,6 +426,32 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 		contractsOutput[file][name] = contractData;
 	}
 	output["contracts"] = contractsOutput;
+
+	{
+		ErrorList juliaErrors;
+		ErrorReporter juliaErrorReporter(juliaErrors);
+		m_compilerStack.prepareJulia(&juliaErrorReporter);
+		if (juliaErrorReporter.errors().empty())
+			output["julia"] = assembly::AsmPrinter()(m_compilerStack.julia());
+
+		for (auto const& error: juliaErrorReporter.errors())
+		{
+			auto err = dynamic_pointer_cast<Error const>(error);
+
+			errors.append(formatErrorWithException(
+				*error,
+				err->type() == Error::Type::Warning,
+				err->typeName(),
+				"julia",
+				"",
+				scannerFromSourceName
+			));
+		}
+
+		// FIXME!!
+		if (!juliaErrors.empty())
+			output["errors"] = errors;
+	}
 
 	return output;
 }
