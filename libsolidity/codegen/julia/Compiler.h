@@ -58,10 +58,16 @@ private:
 	}
 
 	virtual bool visit(SourceUnit const&) override { return true; }
-	virtual bool visit(PragmaDirective const&) override { return false; }
+	virtual bool visit(PragmaDirective const&) override { return true; }
+	virtual bool visit(ContractDefinition const&) override;
+	virtual bool visit(FunctionDefinition const&) override;
+	virtual void endVisit(FunctionDefinition const&) override;
+	virtual bool visit(Block const&) override;
+	virtual bool visit(Throw const&) override;
 
 	bool m_processed = false;
 	assembly::Block m_body;
+	assembly::FunctionDefinition m_currentFunction;
 	ErrorReporter& m_errorReporter;
 };
 
