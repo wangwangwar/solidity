@@ -58,6 +58,8 @@ public:
 
 	eth::Assembly assemble();
 
+	std::string webassembly();
+
 	/// Parse and assemble a string in one run - for use in Solidity code generation itself.
 	bool parseAndAssemble(
 		std::string const& _input,

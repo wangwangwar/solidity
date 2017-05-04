@@ -27,6 +27,7 @@
 #include <libsolidity/inlineasm/AsmPrinter.h>
 #include <libsolidity/inlineasm/AsmAnalysis.h>
 #include <libsolidity/inlineasm/AsmAnalysisInfo.h>
+#include <libsolidity/inlineasm/WebAssembly.h>
 
 #include <libsolidity/parsing/Scanner.h>
 
@@ -93,3 +94,9 @@ bool InlineAssemblyStack::parseAndAssemble(
 	return errors.empty();
 }
 
+string InlineAssemblyStack::webassembly()
+{
+	ErrorList errors;
+	WebAssembly webassembly(errors);
+	return webassembly.assemble(*m_parserResult);
+}
