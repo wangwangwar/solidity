@@ -1,8 +1,11 @@
 ### 0.4.12 (unreleased)
+
+Features:
  * AST: export all attributes to Json format
 
 Bugfixes:
- * Unused variable warnings no longer issued for variables used inside inline assembly
+ * Type checker: Unused variable warnings no longer issued for variables used inside inline assembly
+ * Code generator: Use REVERT instead of INVALID for generated input validation routines.
 
 ### 0.4.11 (2017-05-03)
 
