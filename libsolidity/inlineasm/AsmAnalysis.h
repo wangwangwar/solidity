@@ -89,6 +89,7 @@ private:
 	bool expectDeposit(int _deposit, int _oldHeight, SourceLocation const& _location);
 	Scope& scope(assembly::Block const* _block);
 	void expectValidType(std::string const& type, SourceLocation const& _location);
+	void warnOnFutureInstruction(solidity::Instruction _instr, SourceLocation const& _location);
 
 	int m_stackHeight = 0;
 	julia::ExternalIdentifierAccess::Resolver const& m_resolver;
