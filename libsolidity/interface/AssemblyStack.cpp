@@ -27,6 +27,7 @@
 #include <libsolidity/inlineasm/AsmParser.h>
 #include <libsolidity/inlineasm/AsmAnalysis.h>
 #include <libsolidity/inlineasm/AsmCodeGen.h>
+#include <libsolidity/inlineasm/WebAssembly.h>
 
 #include <libevmasm/Assembly.h>
 
@@ -72,10 +73,29 @@ eth::LinkerObject AssemblyStack::assemble(Machine _machine)
 	case Machine::EVM15:
 		solUnimplemented("EVM 1.5 backend is not yet implemented.");
 	case Machine::eWasm:
-		solUnimplemented("eWasm backend is not yet implemented.");
+		solUnimplemented("eWASM backend is not yet implemented.");
 	}
 	// unreachable
 	return eth::LinkerObject();
+}
+
+string AssemblyStack::assemblySource(Machine _machine)
+{
+	solAssert(m_analysisSuccessful, "");
+	solAssert(m_parserResult, "");
+	solAssert(m_analysisInfo, "");
+
+	switch (_machine)
+	{
+	case Machine::EVM:
+		solUnimplemented("EVM 1.0 assembly source backend is not yet implemented.");
+	case Machine::EVM15:
+		solUnimplemented("EVM 1.5 backend is not yet implemented.");
+	case Machine::eWasm:
+		return assembly::WebAssembly(m_errors).assemble(*m_parserResult);
+	}
+	// unreachable
+	return string();
 }
 
 string AssemblyStack::print()

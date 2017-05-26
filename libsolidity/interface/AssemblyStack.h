@@ -63,6 +63,9 @@ public:
 	/// Run the assembly step (should only be called after parseAndAnalyze).
 	eth::LinkerObject assemble(Machine _machine);
 
+	/// Run the assembly step (should only be called after parseAndAnalyze) and print source.
+	std::string assemblySource(Machine _machine);
+
 	/// @returns the errors generated during parsing, analysis (and potentially assembly).
 	ErrorList const& errors() const { return m_errors; }
 

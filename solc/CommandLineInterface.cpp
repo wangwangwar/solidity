@@ -1080,12 +1080,26 @@ bool CommandLineInterface::assemble(
 		catch (Exception const& _exception)
 		{
 			cerr << "Exception while assembling: " << boost::diagnostic_information(_exception) << endl;
-			return false;
+//			return false;
 		}
 		catch (...)
 		{
 			cerr << "Unknown exception while assembling." << endl;
-			return false;
+//			return false;
+		}
+		try
+		{
+			cout << stack.assemblySource(_targetMachine) << endl;
+		}
+		catch (Exception const& _exception)
+		{
+			cerr << "Exception while assembling: " << boost::diagnostic_information(_exception) << endl;
+//			return false;
+		}
+		catch (...)
+		{
+			cerr << "Unknown exception while assembling." << endl;
+//			return false;
 		}
 		cout << stack.print() << endl;
 	}
