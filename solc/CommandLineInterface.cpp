@@ -393,6 +393,28 @@ void CommandLineInterface::handleFormal()
 		cout << "Formal version:" << endl << m_compiler->formalTranslation() << endl;
 }
 
+void CommandLineInterface::handleSolJulia()
+{
+	ErrorList juliaErrors;
+	m_compiler->prepareJulia(&juliaErrors);
+
+	auto scannerFromSourceName = [&](string const& _sourceName) -> solidity::Scanner const& { return m_compiler->scanner(_sourceName); };
+	for (auto const& error: juliaErrors)
+	{
+		auto err = dynamic_pointer_cast<Error const>(error);
+		SourceReferenceFormatter::printExceptionInformation(cerr, *err, "Julia error", scannerFromSourceName);
+	}
+
+	if (!juliaErrors.empty())
+		return;
+
+	AssemblyStack stack;
+	/// TODO: add scanner
+	stack.analyze(m_compiler->julia());
+
+	cout << stack.assemble(AssemblyStack::Machine::EVM).toHex() << endl;
+}
+
 void CommandLineInterface::readInputFilesAndConfigureRemappings()
 {
 	bool addStdin = false;
@@ -1110,6 +1132,8 @@ void CommandLineInterface::outputCompilationResults()
 	handleAst(g_argAst);
 	handleAst(g_argAstJson);
 	handleAst(g_argAstCompactJson);
+
+	handleSolJulia();
 
 	vector<string> contracts = m_compiler->contractNames();
 	for (string const& contract: contracts)

@@ -60,6 +60,7 @@ private:
 
 	void handleCombinedJSON();
 	void handleAst(std::string const& _argStr);
+	void handleSolJulia();
 	void handleBinary(std::string const& _contract);
 	void handleOpcode(std::string const& _contract);
 	void handleBytecode(std::string const& _contract);
