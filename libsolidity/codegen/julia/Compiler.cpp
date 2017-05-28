@@ -76,6 +76,7 @@ bool Compiler::visit(FunctionDefinition const& _function)
 
 	assembly::FunctionDefinition funDef;
 	funDef.name = _function.name();
+	funDef.location = _function.location();
 	m_currentFunction = funDef;
 	_function.body().accept(*this);
 	return false;
@@ -94,7 +95,7 @@ bool Compiler::visit(Block const& _node)
 	return false;
 }
 
-bool Compiler::visit(Throw const&)
+bool Compiler::visit(Throw const& _throw)
 {
 	assembly::Literal zero;
 	zero.kind = assembly::LiteralKind::Number;
@@ -105,6 +106,7 @@ bool Compiler::visit(Throw const&)
 	funCall.functionName.name = "revert";
 	funCall.arguments.push_back(zero);
 	funCall.arguments.push_back(zero);
+	funCall.location = _throw.location();
 	m_currentFunction.body.statements.emplace_back(funCall);
 	return false;
 }
