@@ -44,11 +44,26 @@ Scanner const& AssemblyStack::scanner() const
 bool AssemblyStack::parseAndAnalyze(std::string const& _sourceName, std::string const& _source)
 {
 	m_analysisSuccessful = false;
+	m_errors.clear();
 	m_scanner = make_shared<Scanner>(CharStream(_source), _sourceName);
 	m_parserResult = assembly::Parser(m_errorReporter, m_language == Language::JULIA).parse(m_scanner);
 	if (!m_errorReporter.errors().empty())
 		return false;
 	solAssert(m_parserResult, "");
+
+	m_analysisInfo = make_shared<assembly::AsmAnalysisInfo>();
+	assembly::AsmAnalyzer analyzer(*m_analysisInfo, m_errorReporter);
+	m_analysisSuccessful = analyzer.analyze(*m_parserResult);
+	return m_analysisSuccessful;
+}
+
+bool AssemblyStack::analyze(assembly::Block const& _block, Scanner const* _scanner)
+{
+	m_analysisSuccessful = false;
+	m_errors.clear();
+	if (_scanner)
+		m_scanner = make_shared<Scanner>(*_scanner);
+	m_parserResult = make_shared<assembly::Block>(_block);
 
 	m_analysisInfo = make_shared<assembly::AsmAnalysisInfo>();
 	assembly::AsmAnalyzer analyzer(*m_analysisInfo, m_errorReporter);
