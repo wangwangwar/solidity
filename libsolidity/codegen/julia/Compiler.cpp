@@ -110,3 +110,9 @@ bool Compiler::visit(Throw const& _throw)
 	m_currentFunction.body.statements.emplace_back(funCall);
 	return false;
 }
+
+bool Compiler::visit(InlineAssembly const& _inlineAssembly)
+{
+	m_currentFunction.body.statements.emplace_back(_inlineAssembly.operations());
+	return false;
+}
