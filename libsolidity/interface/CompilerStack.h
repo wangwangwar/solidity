@@ -38,6 +38,7 @@
 #include <libsolidity/interface/ErrorReporter.h>
 #include <libsolidity/interface/ReadFile.h>
 #include <libsolidity/inlineasm/AsmData.h>
+#include <libsolidity/interface/AssemblyStack.h>
 
 namespace dev
 {
@@ -139,6 +140,9 @@ public:
 
 	void prepareJulia(ErrorReporter* _errorReporter = nullptr);
 	assembly::Block const& julia() const { return m_juliaBody; }
+
+	/// @returns the assembly stack for a contract.
+	AssemblyStack const assemblyStack() const;
 
 	/// @returns the assembled object for a contract.
 	eth::LinkerObject const& object(std::string const& _contractName = "") const;

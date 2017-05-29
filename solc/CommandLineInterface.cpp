@@ -395,6 +395,7 @@ void CommandLineInterface::handleFormal()
 
 void CommandLineInterface::handleSolJulia()
 {
+#if 0
 	ErrorList juliaErrors;
 	m_compiler->prepareJulia(&juliaErrors);
 
@@ -413,6 +414,10 @@ void CommandLineInterface::handleSolJulia()
 	stack.analyze(m_compiler->julia());
 
 	cout << stack.assemble(AssemblyStack::Machine::EVM).toHex() << endl;
+#else
+	AssemblyStack stack = m_compiler->assemblyStack();
+	cout << stack.assemble(AssemblyStack::Machine::EVM).toHex() << endl;
+#endif
 }
 
 void CommandLineInterface::readInputFilesAndConfigureRemappings()
