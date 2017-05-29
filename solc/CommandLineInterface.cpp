@@ -1101,6 +1101,10 @@ bool CommandLineInterface::assemble(
 			cout << object.binary.get()->toHex() << endl;
 		else
 			cerr << "No binary representation found." << endl;
+		if (!object.text.empty())
+			cout << object.text << endl;
+		else
+			cerr << "No text representation found." << endl;
 		cout << stack.print() << endl;
 	}
 

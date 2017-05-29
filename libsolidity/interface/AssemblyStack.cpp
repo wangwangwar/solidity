@@ -69,7 +69,9 @@ MachineAssemblyObject AssemblyStack::assemble(Machine _machine)
 		MachineAssemblyObject object;
 		auto assembly = assembly::CodeGenerator(m_errors).assemble(*m_parserResult, *m_analysisInfo);
 		object.binary = make_shared<eth::LinkerObject>(assembly.assemble());
-		/// TODO: fill out text representation
+		ostringstream tmp;
+		assembly.stream(tmp);
+		object.text = tmp.str();
 		return object;
 	}
 	case Machine::EVM15:
