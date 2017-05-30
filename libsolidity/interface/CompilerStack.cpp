@@ -341,6 +341,8 @@ void CompilerStack::prepareJulia(ErrorReporter *_errorReporter)
 	m_juliaBody = julia.body();
 }
 
+#include <libsolidity/inlineasm/AsmPrinter.h>
+
 AssemblyStack const CompilerStack::assemblyStack() const
 {
 	/// TODO: return an assembly for each contract
@@ -349,6 +351,7 @@ AssemblyStack const CompilerStack::assemblyStack() const
 	JuliaCompiler julia(errorReporter);
 	for (Source const* source: m_sourceOrder)
 		julia.process(*source->ast);
+	cout << assembly::AsmPrinter()(julia.body()) << endl;
 	AssemblyStack stack;
 	/// TODO: set scanner
 	stack.analyze(julia.body());
