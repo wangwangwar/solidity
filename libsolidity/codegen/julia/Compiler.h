@@ -66,6 +66,8 @@ private:
 	virtual bool visit(Throw const&) override;
 	virtual bool visit(InlineAssembly const&) override;
 
+	void appendFunction(std::string const&);
+
 	bool m_processed = false;
 	assembly::Block m_body;
 	assembly::FunctionDefinition m_currentFunction;

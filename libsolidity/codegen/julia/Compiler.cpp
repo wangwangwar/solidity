@@ -21,6 +21,8 @@
  */
 
 #include <libsolidity/codegen/julia/Compiler.h>
+#include <libsolidity/inlineasm/AsmParser.h>
+
 #include <boost/algorithm/string/predicate.hpp>
 
 using namespace std;
@@ -115,4 +117,13 @@ bool Compiler::visit(InlineAssembly const& _inlineAssembly)
 {
 	m_currentFunction.body.statements.emplace_back(_inlineAssembly.operations());
 	return false;
+}
+
+void Compiler::appendFunction(string const& _function)
+{
+	auto scanner = make_shared<Scanner>(CharStream(_function), "");
+	auto result = assembly::Parser(m_errorReporter).parse(scanner);
+	solAssert(result, "");
+
+	m_body.statements.emplace_back(std::move(*result));
 }
