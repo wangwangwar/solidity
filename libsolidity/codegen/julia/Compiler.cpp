@@ -103,7 +103,7 @@ void Compiler::buildDispatcher(ContractDefinition const& _contract)
 		// FIXME check for payable
 		defaultCase.body = wrapInBlock(createFunctionCall("fallback"));
 	else
-		defaultCase.body = wrapInBlock(createFunctionCall("revert"));
+		defaultCase.body = wrapInBlock(createRevert());
 	_switch.cases.emplace_back(defaultCase);
 
 	m_body.statements.emplace_back(_switch);
@@ -160,15 +160,7 @@ bool Compiler::visit(Block const& _node)
 
 bool Compiler::visit(Throw const& _throw)
 {
-	assembly::Literal zero;
-	zero.kind = assembly::LiteralKind::Number;
-	zero.value = "0";
-	zero.type = "u256";
-
-	assembly::FunctionCall funCall;
-	funCall.functionName.name = "revert";
-	funCall.arguments.push_back(zero);
-	funCall.arguments.push_back(zero);
+	assembly::FunctionCall funCall = createRevert();
 	funCall.location = _throw.location();
 	m_currentFunction.body.statements.emplace_back(funCall);
 	return false;
@@ -203,4 +195,18 @@ assembly::Block Compiler::wrapInBlock(assembly::Statement const& _statement)
 	assembly::Block block;
 	block.statements.push_back(_statement);
 	return block;
+}
+
+assembly::FunctionCall Compiler::createRevert()
+{
+	assembly::Literal zero;
+	zero.kind = assembly::LiteralKind::Number;
+	zero.value = "0";
+	zero.type = "u256";
+
+	assembly::FunctionCall funCall;
+	funCall.functionName.name = "revert";
+	funCall.arguments.push_back(zero);
+	funCall.arguments.push_back(zero);
+	return funCall;
 }
