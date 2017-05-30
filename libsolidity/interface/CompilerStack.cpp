@@ -304,7 +304,6 @@ void CompilerStack::saveImportedSourceCodes(map<string, string> _sources)
 		{
 			ASTPointer<Scanner> scanner = make_shared<Scanner>(CharStream(src.second));
 			m_sources[src.first].scanner = scanner;
-			cout << "added srcfile" << std::endl;
 		}
 }
 
@@ -864,7 +863,7 @@ string CompilerStack::createOnChainMetadata(Contract const& _contract) const
 		if (m_importedSources)
 		{
 			solAssert(m_sourceJsons.count(s.first), "no JSON found for source");
-//			meta["sources"][s.first]["AST-JSON"] = *(m_sourceJsons[sx.first]); //TODO
+//			meta["sources"][s.first]["AST-JSON"] = *(m_sourceJsons[sx.first]); //TODO?
 		}
 	}
 	meta["settings"]["optimizer"]["enabled"] = m_optimize;

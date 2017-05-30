@@ -791,12 +791,15 @@ bool CommandLineInterface::processInput()
 							tmp_sources[src.asCString()] = "noSourceCodeAvailable";
 						}
 					}
-					// case b)
+					// case b) WATCHOUT: the name right now is .json, yet it should be saved under .sol
 					else
 					{
 						solAssert((*ast)["nodeType"] == "SourceUnit", "invalid AST: the top-level node should be a SourceUnit");
-						sourceJsons[srcPair.first] = ast;
-						tmp_sources[srcPair.first] = "noSourceCodeAvailable";
+						string s = srcPair.first;
+						size_t f = s.find(".json");
+						s.replace(f, std::string(".json").length(), ".sol");
+						sourceJsons[s] = ast;
+						tmp_sources[s] = "noSourceCodeAvailable";
 						//TODO now the xxx.json is the absolute path name
 					}
 				}
