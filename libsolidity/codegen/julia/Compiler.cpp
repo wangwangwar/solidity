@@ -125,5 +125,7 @@ void Compiler::appendFunction(string const& _function)
 	auto result = assembly::Parser(m_errorReporter).parse(scanner);
 	solAssert(result, "");
 
-	m_body.statements.emplace_back(std::move(*result));
+	auto statements = result->statements;
+	for (size_t i = 0; i < statements.size(); ++i)
+		m_body.statements.emplace_back(std::move(statements[i]));
 }
