@@ -115,7 +115,10 @@ public:
 
 	/// Imports given SourceUnits so they can be analyzed. Leads to the same internal state as parse()
 	/// @returns false if the CompilerStack was not reset beforehand.
-	bool importASTs(std::map<std::string, std::shared_ptr<SourceUnit>> _sources);
+	//bool importASTs(std::map<std::string, std::shared_ptr<SourceUnit>> _sources);
+	bool importASTs(std::map<std::string, Json::Value const*> _sources);
+	/// Saves sourcecodes for the imported ASTs, so they can be part of the onchain-metadata
+	void saveImportedSourceCodes(std::map<std::string, std::string> _sources);
 
 	/// @returns a list of the contract names in the sources.
 	std::vector<std::string> contractNames() const;
@@ -277,6 +280,7 @@ private:
 	Json::Value const& contractABI(Contract const&) const;
 	Json::Value const& natspec(Contract const&, DocumentationType _type) const;
 
+
 	struct Remapping
 	{
 		std::string context;
@@ -292,10 +296,12 @@ private:
 	/// "context:prefix=target"
 	std::vector<Remapping> m_remappings;
 	std::map<std::string const, Source> m_sources;
+	/// map of input files to Json-ASTs
+	std::map<std::string, Json::Value const*> m_sourceJsons;
 	std::shared_ptr<GlobalContext> m_globalContext;
 	std::map<ASTNode const*, std::shared_ptr<DeclarationContainer>> m_scopes;
 	std::vector<Source const*> m_sourceOrder;
-	std::map<std::string const, Contract> m_contracts;
+	std::map<std::string, Contract> m_contracts;
 	std::string m_formalTranslation;
 	ErrorList m_errors;
 	bool m_metadataLiteralSources = false;
