@@ -89,7 +89,7 @@ void Compiler::buildDispatcher(ContractDefinition const& _contract)
 		assembly::Block body;
 		if (!function->isPayable())
 			body.statements.emplace_back(createFunctionCall("ensureNoValueTransfer"));
-		body.statements.emplace_back(createFunctionCall(function->name()));
+		body.statements.emplace_back(createFunctionCall("_" + function->name()));
 
 		assembly::Case _case;
 		_case.value = make_shared<assembly::Literal>(literal);
@@ -138,7 +138,11 @@ bool Compiler::visit(FunctionDefinition const& _function)
 	}
 
 	assembly::FunctionDefinition funDef;
-	funDef.name = _function.name();
+	cout << "func: " << _function.name() << endl;
+	if (_function.name().empty())
+		funDef.name = "fallback";
+	else
+		funDef.name = "_" + _function.name();
 	funDef.location = _function.location();
 	m_currentFunction = funDef;
 	_function.body().accept(*this);
