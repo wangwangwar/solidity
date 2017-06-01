@@ -79,3 +79,12 @@ bool Scope::exists(string const& _name)
 	else
 		return false;
 }
+
+size_t Scope::numberOfVariables() const
+{
+	size_t count = 0;
+	for (auto const& identifier: identifiers)
+		if (identifier.second.type() == typeid(Scope::Variable))
+			count++;
+	return count;
+}

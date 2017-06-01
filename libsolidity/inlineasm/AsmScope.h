@@ -123,6 +123,9 @@ struct Scope
 	/// across function and assembly boundaries).
 	bool exists(std::string const& _name);
 
+	/// @returns the number of variables directly registered inside the scope.
+	size_t numberOfVariables() const;
+
 	Scope* superScope = nullptr;
 	/// If true, variables from the super scope are not visible here (other identifiers are),
 	/// but they are still taken into account to prevent shadowing.
