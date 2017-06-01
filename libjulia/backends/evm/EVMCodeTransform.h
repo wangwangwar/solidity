@@ -22,6 +22,7 @@
 
 #include <libsolidity/inlineasm/AsmStack.h>
 #include <libsolidity/inlineasm/AsmScope.h>
+#include <libsolidity/inlineasm/AsmDataForward.h>
 
 #include <boost/variant.hpp>
 
@@ -32,20 +33,6 @@ namespace solidity
 class ErrorReporter;
 namespace assembly
 {
-struct Literal;
-struct Block;
-struct Switch;
-struct Label;
-struct FunctionalInstruction;
-struct Assignment;
-struct VariableDeclaration;
-struct Instruction;
-struct Identifier;
-struct StackAssignment;
-struct FunctionDefinition;
-struct FunctionCall;
-struct ForLoop;
-
 struct AsmAnalysisInfo;
 }
 }
